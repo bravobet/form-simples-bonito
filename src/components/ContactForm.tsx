@@ -105,9 +105,6 @@ export default function ContactForm() {
               Conversão Digital
             </h2>
           </div>
-          <p className="text-sm text-muted-foreground mt-3">
-            Preencha seus dados para garantir sua vaga no evento
-          </p>
         </CardHeader>
         
         <CardContent className="space-y-6">
