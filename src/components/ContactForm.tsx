@@ -70,8 +70,8 @@ export default function ContactForm() {
       await new Promise(resolve => setTimeout(resolve, 2000));
       
       toast({
-        title: "Formulário enviado com sucesso!",
-        description: `Obrigado, ${data.name}. Entraremos em contato em breve.`,
+        title: "Cadastro realizado com sucesso!",
+        description: `Parabéns, ${data.name}! Sua vaga no evento Conversão Digital foi reservada.`,
       });
       
       reset();
@@ -98,10 +98,15 @@ export default function ContactForm() {
             />
           </div>
           <CardTitle className="text-2xl font-semibold bg-gradient-to-r from-primary to-primary-glow bg-clip-text text-transparent">
-            Cadastro de Contato
+            Cadastro para o Evento
           </CardTitle>
-          <p className="text-sm text-muted-foreground mt-2">
-            Preencha seus dados para entrarmos em contato
+          <div className="bg-gradient-to-r from-primary to-primary-glow p-3 rounded-lg mt-2">
+            <h2 className="text-lg font-semibold text-white text-center">
+              Conversão Digital
+            </h2>
+          </div>
+          <p className="text-sm text-muted-foreground mt-3">
+            Preencha seus dados para garantir sua vaga no evento
           </p>
         </CardHeader>
         
@@ -200,7 +205,7 @@ export default function ContactForm() {
               variant="gradient"
               disabled={isSubmitting}
             >
-              {isSubmitting ? "Enviando..." : "Enviar Cadastro"}
+              {isSubmitting ? "Processando cadastro..." : "Garantir minha vaga"}
             </Button>
           </form>
         </CardContent>
