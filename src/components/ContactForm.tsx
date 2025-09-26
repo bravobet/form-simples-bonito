@@ -87,31 +87,39 @@ export default function ContactForm() {
     setIsSubmitting(true);
     
     try {
-      // Get user's IP address (basic implementation)
-      const ipResponse = await fetch('https://api.ipify.org?format=json');
-      const { ip } = await ipResponse.json();
+      // Get user's IP address (optional)
+      let ipAddress = '';
+      try {
+        const response = await fetch('https://api.ipify.org?format=json');
+        const ipData = await response.json();
+        ipAddress = ipData.ip;
+      } catch (ipError) {
+        console.log('Could not get IP address:', ipError);
+      }
 
-      // Save to Supabase database
+      // Save to Supabase
       const { error } = await supabase
         .from('event_registrations')
-        .insert({
-          nome: data.name,
-          cpf: data.cpf,
-          telefone: data.phone,
-          email: data.email,
-          ip_address: ip,
-        });
+        .insert([
+          {
+            nome: data.name,
+            cpf: data.cpf,
+            telefone: data.phone,
+            email: data.email,
+            ip_address: ipAddress
+          }
+        ]);
 
       if (error) {
         throw error;
       }
       
-      // Download CSV with form data as backup
+      // Also download CSV with form data
       downloadCSV(data);
       
       toast({
         title: "Cadastro realizado com sucesso!",
-        description: `Parabéns, ${data.name}! Sua vaga no evento Conversão Digital foi reservada.`,
+        description: `Parabéns, ${data.name}! Sua vaga no evento Conversão Digital foi reservada e salva no servidor.`,
       });
       
       reset();
