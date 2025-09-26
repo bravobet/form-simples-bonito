@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { validateCPF } from "@/lib/cpf-validator";
+import { supabase } from "@/integrations/supabase/client";
 import bravoBetLogo from "@/assets/bravo-bet-logo.png";
 
 const formSchema = z.object({
@@ -86,19 +87,36 @@ export default function ContactForm() {
     setIsSubmitting(true);
     
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Get user's IP address (basic implementation)
+      const ipResponse = await fetch('https://api.ipify.org?format=json');
+      const { ip } = await ipResponse.json();
+
+      // Save to Supabase database
+      const { error } = await supabase
+        .from('event_registrations')
+        .insert({
+          nome: data.name,
+          cpf: data.cpf,
+          telefone: data.phone,
+          email: data.email,
+          ip_address: ip,
+        });
+
+      if (error) {
+        throw error;
+      }
       
-      // Download CSV with form data
+      // Download CSV with form data as backup
       downloadCSV(data);
       
       toast({
         title: "Cadastro realizado com sucesso!",
-        description: `Parabéns, ${data.name}! Sua vaga no evento Conversão Digital foi reservada e os dados foram salvos em CSV.`,
+        description: `Parabéns, ${data.name}! Sua vaga no evento Conversão Digital foi reservada.`,
       });
       
       reset();
     } catch (error) {
+      console.error('Error submitting form:', error);
       toast({
         title: "Erro ao enviar formulário",
         description: "Tente novamente em alguns minutos.",
