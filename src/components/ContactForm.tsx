@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { validateCPF } from "@/lib/cpf-validator";
+import bravoBetLogo from "@/assets/bravo-bet-logo.png";
 
 const formSchema = z.object({
   name: z
@@ -89,6 +90,13 @@ export default function ContactForm() {
     <div className="min-h-screen bg-gradient-to-br from-background via-accent/20 to-primary/5 flex items-center justify-center p-4">
       <Card className="w-full max-w-md shadow-xl border-0 bg-card/95 backdrop-blur-sm">
         <CardHeader className="text-center pb-6">
+          <div className="flex justify-center mb-4">
+            <img 
+              src={bravoBetLogo} 
+              alt="BRAVO BET Logo" 
+              className="h-12 w-auto"
+            />
+          </div>
           <CardTitle className="text-2xl font-semibold bg-gradient-to-r from-primary to-primary-glow bg-clip-text text-transparent">
             Cadastro de Contato
           </CardTitle>
