@@ -87,44 +87,32 @@ export default function ContactForm() {
     setIsSubmitting(true);
     
     try {
-      // Get user's IP address (optional)
-      let ipAddress = '';
-      try {
-        const response = await fetch('https://api.ipify.org?format=json');
-        const ipData = await response.json();
-        ipAddress = ipData.ip;
-      } catch (ipError) {
-        console.log('Could not get IP address:', ipError);
-      }
-
-      // Save to Supabase
+      // Save to Supabase database
       const { error } = await supabase
         .from('event_registrations')
-        .insert([
-          {
-            nome: data.name,
-            cpf: data.cpf,
-            telefone: data.phone,
-            email: data.email,
-            ip_address: ipAddress
-          }
-        ]);
+        .insert({
+          nome: data.name,
+          cpf: data.cpf,
+          telefone: data.phone,
+          email: data.email,
+          ip_address: null // Could be collected from a backend service if needed
+        });
 
       if (error) {
         throw error;
       }
-      
-      // Also download CSV with form data
+
+      // Still download CSV for backup
       downloadCSV(data);
       
       toast({
         title: "Cadastro realizado com sucesso!",
-        description: `Parabéns, ${data.name}! Sua vaga no evento Conversão Digital foi reservada e salva no servidor.`,
+        description: `Parabéns, ${data.name}! Sua vaga no evento Conversão Digital foi reservada e os dados foram salvos no banco de dados.`,
       });
       
       reset();
     } catch (error) {
-      console.error('Error submitting form:', error);
+      console.error('Error saving registration:', error);
       toast({
         title: "Erro ao enviar formulário",
         description: "Tente novamente em alguns minutos.",
